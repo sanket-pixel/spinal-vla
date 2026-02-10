@@ -12,34 +12,31 @@ The system is divided into three distinct biological layers:
 
 ```mermaid
 graph TD
-    subgraph Laptop ["🦿 The Body (Simulation)"]
-        Isaac[Isaac Sim / Mock Physics]
-        Sensors[Sensor Pub (5555)]
-        Motors[Motor Sub (5556)]
-        Isaac --> Sensors
-        Motors --> Isaac
-    end
+subgraph Body ["🦿 The Body (Simulation)"]
+    Isaac["Isaac Sim / Mock Physics"]
+    Sensors["Sensor Pub (5555)"]
+    Motors["Motor Sub (5556)"]
+    Isaac --> Sensors
+    Motors --> Isaac
+end
 
-    subgraph Orin ["🤖 The Robot (Jetson Orin)"]
-        subgraph Spine ["The Spine (C++) - 100Hz"]
-            Reflex[Reflex Controller]
-            Safety[Safety Limits / Dead Man's Switch]
-            Reflex --> Safety
-        end
-        
-        subgraph Cortex ["The Cortex (Python) - 5Hz"]
-            VLM[VLM / Planner Agent]
-        end
-        
-        %% Communication Lines
-        Sensors -.->|ZMQ TCP| Reflex
-        Safety -.->|ZMQ TCP| Motors
-        
-        Reflex <-->|ZMQ IPC / Shared Mem| VLM
+subgraph Robot ["🤖 The Robot (Jetson Orin)"]
+    subgraph Spine ["The Spine (C++) - 100Hz"]
+        Reflex["Reflex Controller"]
+        Safety["Safety Limits"]
+        Reflex --> Safety
     end
+    
+    subgraph Brain ["The Cortex (Python) - 5Hz"]
+        VLM["VLM / Planner Agent"]
+    end
+end
 
+%% Communication Lines
+Sensors -.-> Reflex
+Safety -.-> Motors
+Reflex <--> VLM
 ```
-
 ---
 
 ## 🧩 Component Breakdown
