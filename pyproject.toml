@@ -1,0 +1,12 @@
+[project]
+name = "spinal-vla"
+version = "0.1.0"
+description = "VLA Robotic Controller"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pillow",
+    "opencv-python-headless",
+    "transformers",
+    "accelerate",
+]
